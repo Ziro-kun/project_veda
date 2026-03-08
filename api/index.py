@@ -56,6 +56,7 @@ def analyze():
     if file.filename == '':
         return jsonify({'error': '선택된 파일이 없습니다.'}), 400
 
+    api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         return jsonify({'error': 'API 키가 설정되지 않았습니다. 환경 변수를 확인해주세요.'}), 503
 
