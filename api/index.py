@@ -37,8 +37,12 @@ PROMPT = """
 
 def pil_to_bytes(image: Image.Image) -> bytes:
     buf = BytesIO()
-    fmt = image.format if image.format else 'JPEG'
-    image.save(buf, format=fmt)
+    if image.mode != 'RGB':
+        image = image.convert('RGB')
+    
+    # 퀄리티를 최적화하여 Vercel 메모리 초과/타임아웃 방지
+    image.thumbnail((1024, 1024))
+    image.save(buf, format='JPEG', quality=85)
     return buf.getvalue()
 
 
@@ -63,14 +67,20 @@ def analyze():
     try:
         image = Image.open(file.stream)
         img_bytes = pil_to_bytes(image)
-        mime = file.mimetype or 'image/jpeg'
+        
+        # JPEG로 강제 변환하므로 mime type은 항상 image/jpeg
+        mime = 'image/jpeg'
 
         client = genai.Client(api_key=api_key)
         image_part = types.Part.from_bytes(data=img_bytes, mime_type=mime)
 
         response = client.models.generate_content(
             model='gemini-2.0-flash',
-            contents=[PROMPT, image_part]
+            contents=[PROMPT, image_part],
+            config=types.GenerateContentConfig(
+                temperature=0.4,
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)
+            )
         )
         return jsonify({'result': response.text})
 
