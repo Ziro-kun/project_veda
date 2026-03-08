@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Veda 🤖 | G-Intelligence Tactical System</title>
+    <meta
+      name="description"
+      content="Project Veda - AI 기반 건프라 전술 정보 브리핑 시스템. 이미지를 업로드하면 기체를 식별하고 상세 데이터를 제공합니다."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <!-- HUD scanline overlay -->
+    <div class="scanlines"></div>
+
+    <!-- Header -->
+    <header class="hud-header">
+      <div class="header-inner">
+        <div class="logo-block">
+          <span class="logo-icon">◈</span>
+          <div class="logo-text">
+            <span class="logo-title">PROJECT VEDA</span>
+            <span class="logo-sub">G-Intelligence Tactical System v2.0</span>
+          </div>
+        </div>
+        <div class="status-bar">
+          <span class="status-dot"></span>
+          <span class="status-label">SYSTEM ONLINE</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main-container">
+      <!-- Upload Panel -->
+      <section class="panel upload-panel">
+        <div class="panel-header">
+          <span class="panel-label">[ TACTICAL DATA INPUT ]</span>
+        </div>
+
+        <div
+          id="drop-zone"
+          class="drop-zone"
+          tabindex="0"
+          role="button"
+          aria-label="이미지 업로드 영역"
+        >
+          <div class="drop-zone-inner">
+            <div class="drop-icon">⊕</div>
+            <p class="drop-title">이미지를 드래그하거나 클릭하여 스캔</p>
+            <p class="drop-sub">JPG, PNG, JPEG 지원</p>
+          </div>
+          <input
+            type="file"
+            id="file-input"
+            accept="image/jpg,image/jpeg,image/png"
+            hidden
+          />
+        </div>
+
+        <!-- Preview -->
+        <div id="preview-container" class="preview-container hidden">
+          <img
+            id="preview-image"
+            class="preview-image"
+            alt="스캔된 기체 이미지"
+          />
+          <div class="preview-overlay">
+            <span class="preview-label">IMAGE SCANNED</span>
+          </div>
+        </div>
+
+        <button
+          id="analyze-btn"
+          class="analyze-btn hidden"
+          aria-label="분석 시작"
+        >
+          <span class="btn-icon">▶</span>
+          <span class="btn-text">데이터 분석 개시</span>
+          <span class="btn-sub">ANALYZE</span>
+        </button>
+      </section>
+
+      <!-- Result Panel -->
+      <section class="panel result-panel">
+        <div class="panel-header">
+          <span class="panel-label">[ VEDA TACTICAL BRIEFING ]</span>
+          <span id="result-status" class="result-status">STANDBY</span>
+        </div>
+
+        <!-- Idle state -->
+        <div id="idle-state" class="idle-state">
+          <div class="idle-icon">◎</div>
+          <p class="idle-text">
+            이미지를 업로드하면<br />전술 데이터 브리핑이 이곳에 표시됩니다.
+          </p>
+        </div>
+
+        <!-- Loading state -->
+        <div id="loading-state" class="loading-state hidden">
+          <div class="loader-ring"></div>
+          <p class="loader-text">
+            베다 시스템이 데이터베이스와 링크 중입니다...
+          </p>
+          <p class="loader-sub">LINKING TO VEDA DATABASE...</p>
+        </div>
+
+        <!-- Result content -->
+        <div id="result-content" class="result-content hidden"></div>
+
+        <!-- Error state -->
+        <div id="error-state" class="error-state hidden">
+          <div class="error-icon">⚠</div>
+          <p id="error-message" class="error-message"></p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="hud-footer">
+      <span
+        >PROJECT VEDA &copy; 2026 &nbsp;|&nbsp; Powered by Google Gemini AI
+        &nbsp;|&nbsp; Built for Portfolio</span
+      >
+    </footer>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>
