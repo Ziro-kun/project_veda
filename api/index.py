@@ -78,8 +78,8 @@ def analyze():
         )
         image_part = types.Part.from_bytes(data=img_bytes, mime_type=mime)
 
-        # gemini-1.5-flash: 범용 무료 티어에서 가장 안정적으로 지원
-        MODELS = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro']
+        # curl 확인 결과: 이 API 키에서 지원되는 모델 목록 (1.5 계열 없음)
+        MODELS = ['gemini-2.0-flash', 'gemini-2.0-flash-001', 'gemini-2.5-flash']
         response = None
         last_err = None
         for model_name in MODELS:
