@@ -71,7 +71,11 @@ def analyze():
         # JPEG로 강제 변환하므로 mime type은 항상 image/jpeg
         mime = 'image/jpeg'
 
-        client = genai.Client(api_key=api_key)
+        # v1beta → v1 강제 지정 (유료 키 환경에서 v1beta 404 방지)
+        client = genai.Client(
+            api_key=api_key,
+            http_options=types.HttpOptions(api_version='v1')
+        )
         image_part = types.Part.from_bytes(data=img_bytes, mime_type=mime)
 
         # gemini-1.5-flash: 범용 무료 티어에서 가장 안정적으로 지원
