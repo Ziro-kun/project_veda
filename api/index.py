@@ -74,14 +74,26 @@ def analyze():
         client = genai.Client(api_key=api_key)
         image_part = types.Part.from_bytes(data=img_bytes, mime_type=mime)
 
-        response = client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=[PROMPT, image_part],
-            config=types.GenerateContentConfig(
-                temperature=0.4,
-                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)
-            )
-        )
+        # gemini-1.5-flash: 범용 무료 티어에서 가장 안정적으로 지원
+        MODELS = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro']
+        response = None
+        last_err = None
+        for model_name in MODELS:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=[PROMPT, image_part],
+                    config=types.GenerateContentConfig(
+                        temperature=0.4,
+                        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)
+                    )
+                )
+                break
+            except Exception as e:
+                last_err = e
+                continue
+        if response is None:
+            raise last_err
         return jsonify({'result': response.text})
 
     except Exception as e:
